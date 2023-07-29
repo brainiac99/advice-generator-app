@@ -11,7 +11,7 @@ const getAdvice = async function () {
 
     if (!adviceObj.ok)
       throw new Error(
-        "Something went wrong but don't worry, everybody has difficulties"
+        "We're having some difficulties but don't worry, everyone deals with them"
       );
 
     const adviceText = await adviceObj.json();
