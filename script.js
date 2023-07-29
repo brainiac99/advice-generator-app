@@ -5,18 +5,23 @@ const adviceTextEl = document.querySelector(".advice-text");
 const btn = document.querySelector("button");
 
 const getAdvice = async function () {
-  const adviceObj = await fetch("https://api.adviceslip.com/advice");
+  try {
+    const adviceObj = await fetch("https://api.adviceslip.com/advice");
+    console.log(adviceObj);
 
-  const adviceText = await adviceObj.json();
+    if (!adviceObj.ok)
+      throw new Error(
+        "Something went wrong but don't worry, everybody has difficulties"
+      );
 
-  return adviceText;
+    const adviceText = await adviceObj.json();
+    adviceIdEl.innerText = "#" + adviceText.slip.id;
+    adviceTextEl.innerText = "“" + adviceText.slip.advice + "”";
+  } catch (err) {
+    adviceIdEl.innerText = "error";
+    adviceTextEl.innerText = err;
+  }
 };
 
-function renderAdvice() {
-  getAdvice().then((res) => {
-    adviceIdEl.innerText = "#" + res.slip.id;
-    adviceTextEl.innerText = "“" + res.slip.advice + "”";
-  });
-}
-renderAdvice();
-btn.addEventListener("click", renderAdvice);
+getAdvice();
+btn.addEventListener("click", getAdvice);
